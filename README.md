@@ -202,8 +202,6 @@ const response = await trpc.video.getById.query({ id: "v-001" });
 
 ---
 
-This documentation provides an overview of the available API endpoints and how to interact with them using tRPC.
-
 ## Deployment
 
 ### Live Demo
