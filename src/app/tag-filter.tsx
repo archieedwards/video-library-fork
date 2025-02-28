@@ -41,6 +41,7 @@ export function TagFilter({ tags, selectedTags, onChange }: TagFilterProps) {
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
+            aria-label="Filter by tags"
             variant="outline"
             role="combobox"
             aria-expanded={open}

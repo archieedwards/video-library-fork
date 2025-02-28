@@ -7,7 +7,13 @@ import { ROUTES } from "~/lib/routes";
 import { type Video } from "~/lib/schemas";
 import { formatDuration, formatViews } from "~/lib/utils";
 
-export function VideoCard({ video }: { video: Video }) {
+export function VideoCard({
+  video,
+  priority,
+}: {
+  video: Video;
+  priority?: boolean;
+}) {
   return (
     <Link
       href={ROUTES.VIDEO_DETAILS.replace(":id", video.id)}
@@ -20,6 +26,7 @@ export function VideoCard({ video }: { video: Video }) {
             src={video.thumbnail_url || "/placeholder.svg?height=200&width=350"}
             alt={video.title}
             fill
+            priority={priority}
             sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
             className="object-cover transition-all group-hover:scale-110"
           />
@@ -28,7 +35,7 @@ export function VideoCard({ video }: { video: Video }) {
           </div>
         </div>
         <CardContent className="flex-grow pt-4">
-          <h3 className="mb-1 line-clamp-2 font-semibold">{video.title}</h3>
+          <h2 className="mb-1 line-clamp-2 font-semibold">{video.title}</h2>
           <p className="mb-2 text-sm text-muted-foreground">
             {formatViews(video.views)} •{" "}
             {formatDistanceToNow(new Date(video.created_at), {

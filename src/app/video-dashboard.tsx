@@ -94,8 +94,9 @@ export default function VideoDashboard() {
             isPending && "transition-d animate-pulse",
           )}
         >
-          {videos.map((video) => (
-            <VideoCard key={video.id} video={video} />
+          {videos.map((video, index) => (
+            // We assume this will be more used on mobile so we prioritize the first two images only (above de fold)
+            <VideoCard key={video.id} video={video} priority={index < 1} />
           ))}
         </div>
       )}

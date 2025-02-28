@@ -20,7 +20,7 @@ export function SortOptions<TValue extends string>({
     <div className="flex items-center space-x-2">
       <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-full">
+        <SelectTrigger className="w-full" aria-label="Sort by">
           <SelectValue placeholder="Sort by" />
         </SelectTrigger>
         <SelectContent>
