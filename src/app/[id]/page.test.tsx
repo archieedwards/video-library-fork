@@ -1,5 +1,5 @@
 import { MemoryRouterProvider } from "next-router-mock/dist/MemoryRouterProvider";
-import { customRender, screen, waitFor } from "test/setup";
+import { customRender, screen, waitFor } from "tests/setup";
 import { describe, expect, test } from "vitest";
 import VideoDetailPage from "~/app/[id]/page";
 import { formatDuration, formatViews } from "~/lib/utils";

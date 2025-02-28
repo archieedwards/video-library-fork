@@ -3,7 +3,6 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { filterSchemaState, videoSchema } from "~/lib/schemas";
 import videoService from "~/server/video-service";
-import { TRPCError } from "@trpc/server";
 
 export const videoRouter = createTRPCRouter({
   get: publicProcedure
@@ -51,15 +50,9 @@ export const videoRouter = createTRPCRouter({
       },
     })
     .input(z.object({ id: z.string() }))
-    .output(videoSchema)
+    .output(videoSchema.nullable())
     .query(async ({ input }) => {
       const video = await videoService.getById(input.id);
-      if (!video) {
-        throw new TRPCError({
-          message: "Video not found",
-          code: "NOT_FOUND",
-        });
-      }
-      return video;
+      return video ?? null;
     }),
 });

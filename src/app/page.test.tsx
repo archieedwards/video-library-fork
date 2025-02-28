@@ -8,7 +8,7 @@ import {
 } from "nuqs/adapters/testing";
 
 import VideoDashboardPage from "~/app/page";
-import { customRender } from "test/setup";
+import { customRender } from "tests/setup";
 import mockRouter from "next-router-mock";
 import { ROUTES } from "~/lib/routes";
 import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider";
