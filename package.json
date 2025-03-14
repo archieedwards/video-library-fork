@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "scripts": {
     "build": "next build",
     "check": "next lint && tsc --noEmit",
@@ -17,6 +20,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@prisma/client": "^6.5.0",
     "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-popover": "^1.1.6",
     "@radix-ui/react-select": "^2.1.6",
@@ -37,6 +41,7 @@
     "lucide-react": "^0.476.0",
     "next": "^15.0.1",
     "nuqs": "https://pkg.pr.new/nuqs@923",
+    "prisma": "^6.5.0",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
@@ -70,6 +75,7 @@
     "prettier-plugin-tailwindcss": "^0.6.5",
     "tailwindcss": "^3.4.3",
     "trpc-ui": "^1.0.12",
+    "tsx": "^4.19.3",
     "typescript": "^5.5.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.0.7"

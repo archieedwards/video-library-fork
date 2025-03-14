@@ -36,7 +36,17 @@ Make sure you have the following installed:
     pnpm install
     ```
 
-3.  Start the development server:
+3.  Setup the database:
+
+    ```bash
+    # Create database and run migrations
+    pnpm prisma migrate dev
+
+    # Seed the database with initial data
+    pnpm prisma db seed
+    ```
+
+4.  Start the development server:
 
     ```
     pnpm dev

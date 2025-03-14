@@ -1,17 +1,41 @@
+import { PrismaClient } from "@prisma/client";
 import { LIST_ENTITY_PAGE_SIZE } from "~/lib/constants";
 import { type FilterState } from "~/lib/schemas";
 
+const prisma = new PrismaClient();
+
+type VideoWithTags = {
+  id: string;
+  title: string;
+  thumbnail_url: string;
+  created_at: string;
+  duration: number;
+  views: number;
+  tags: string[];
+};
+
 async function getVideos(input: Partial<FilterState>) {
-  let videos = await import("~/data/videos.json").then(
-    (mod) => mod.default.videos,
-  );
+  const dbVideos = await prisma.video.findMany({
+    include: {
+      tags: true,
+    },
+  });
+
+  let videos: VideoWithTags[] = dbVideos.map((video) => ({
+    id: video.id,
+    title: video.title,
+    thumbnail_url: video.thumbnailUrl,
+    created_at: video.createdAt.toISOString(),
+    duration: video.duration,
+    views: video.views,
+    tags: video.tags.map((tag) => tag.name),
+  }));
 
   const sort = input.sort ?? "newest";
 
   // Filtering by search
   if (input.search) {
     const searchQuery = input.search.toLowerCase();
-
     videos = videos.filter((video) =>
       video.title.toLowerCase().includes(searchQuery),
     );
@@ -41,23 +65,23 @@ async function getVideos(input: Partial<FilterState>) {
     videos.sort((a, b) => b.title.localeCompare(a.title));
   }
 
-  {
-    // Filtering by date range
-    if (input.dateFrom) {
-      videos = videos.filter(
-        (video) => new Date(video.created_at) >= input.dateFrom!,
-      );
-    }
-
-    if (input.dateTo) {
-      videos = videos.filter(
-        (video) => new Date(video.created_at) <= input.dateTo!,
-      );
-    }
+  // Filtering by date range
+  if (input.dateFrom) {
+    videos = videos.filter(
+      (video) => new Date(video.created_at) >= input.dateFrom!,
+    );
   }
 
-  // Tags
-  const availableTags = [...new Set(videos.flatMap((video) => video.tags))];
+  if (input.dateTo) {
+    videos = videos.filter(
+      (video) => new Date(video.created_at) <= input.dateTo!,
+    );
+  }
+
+  // Get all unique tags from the videos we already have
+  const availableTags = [
+    ...new Set(dbVideos.flatMap((v) => v.tags.map((t) => t.name))),
+  ];
 
   // Pagination logic
   const page = input.page ?? 1;
@@ -79,10 +103,24 @@ async function getVideos(input: Partial<FilterState>) {
 }
 
 async function getById(id: string) {
-  const videos = await import("~/data/videos.json").then(
-    (mod) => mod.default.videos,
-  );
-  return videos.find((video) => video.id === id);
+  const video = await prisma.video.findUnique({
+    where: { id },
+    include: {
+      tags: true,
+    },
+  });
+
+  if (!video) return null;
+
+  return {
+    id: video.id,
+    title: video.title,
+    thumbnail_url: video.thumbnailUrl,
+    created_at: video.createdAt.toISOString(),
+    duration: video.duration,
+    views: video.views,
+    tags: video.tags.map((tag) => tag.name),
+  };
 }
 
 const videoService = {
